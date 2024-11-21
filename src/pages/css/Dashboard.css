@@ -1,0 +1,290 @@
+/* Overall dashboard widgets */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.dashboard-content {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.widgets-container {
+  background: rgb(248, 248, 248);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px 20px 20px 80px; 
+  flex: 1;
+}
+
+.widget {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Widget : Punch-in and Punch-out with time calculation */
+.time-widget-content {
+  padding: 20px;
+  margin-inline: 30px;
+  margin-top: 10px;
+}
+
+.punch-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.punch-button {
+  padding: 10px 70px;
+  border: none;
+  border-radius: 4px;
+  background-color: #0f6116;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.punch-button.punched-in {
+  padding: 10px 70px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff7b00;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.punch-button:hover {
+  opacity: 0.9;
+}
+
+.shift-hours {
+  font-size: 1rem;
+  color: #333;
+}
+
+.time-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 10px 0;
+}
+
+.time-item {
+  text-align: left;
+}
+
+.time-item h5 {
+  margin: 0 0 5px 0;
+  color: #666;
+}
+
+.time-item span {
+  font-size: 1rem;
+  color: #333;
+}
+
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+.date-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.check-icon {
+  color: #ff7b00;
+  font-size: 1.2rem;
+}
+
+.menu-container {
+  position: relative;
+}
+
+.menu-icon {
+  cursor: pointer;
+  color: #666;
+  padding: 5px;
+  font-size: 2rem;
+}
+
+.menu-popup {
+  position: absolute;
+  right: 0;
+  top: 25px;
+  background: white;
+  transition: width 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.menu-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.weekly-stats-container {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.weekly-stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.week-navigator {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.week-nav-icon {
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.week-nav-icon:hover {
+  color: #333;
+}
+
+.week-range {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.weekly-time-details {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.weekly-time-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.time-label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.time-value {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* .widget {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-container {
+  flex: 1;
+  padding: 0;
+}
+
+.custom-calendar {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-family: 'Roboto', sans-serif;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 15px;
+}
+
+.react-calendar__navigation__label {
+  font-weight: bold !important;
+  font-size: 1rem !important;
+  color: #1a73e8;
+}
+
+.react-calendar__tile {
+  padding: 14px;
+  font-size: 1em;
+  height: auto;
+}
+
+.react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9em;
+  color: #666;
+  padding: 8px 0;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 12px;
+}
+
+.react-calendar__tile {
+  padding: 16px;
+  font-size: 1em;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+.react-calendar__tile--now {
+  background: #e8f0fe !important;
+  color: #1a73e8;
+}
+
+.react-calendar__tile--active {
+  background: #1a73e8 !important;
+  color: white !important;
+  border-radius: 50%;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #f8f9fa;
+  border-radius: 50%;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #f1f3f4;
+  border-radius: 4px;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #d10000;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #ccc;
+} */
