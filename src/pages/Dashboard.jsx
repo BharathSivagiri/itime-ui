@@ -101,10 +101,10 @@ const Dashboard = () => {
     });
   };
   
-  // Add this state for tracking current displayed month
+  // State for tracking current displayed month
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Add these functions to handle month navigation
+  // Functions to handle month navigation
   const nextMonth = () => {
     setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
   };
