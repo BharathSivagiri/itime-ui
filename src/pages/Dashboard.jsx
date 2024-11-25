@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/layout/Navbar';
 import Sidebar from '../components/layout/Sidebar';
 import { FaTasks, FaChevronLeft, FaChevronRight, FaCalendarAlt } from 'react-icons/fa';
@@ -10,22 +10,51 @@ import { MESSAGES } from '../constants/AppMessages';
 const Dashboard = () => {
   const [isPunchedIn, setIsPunchedIn] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [currentWeek] = useState('17 Dec - 23 Dec');
+  const [selectedWeek, setSelectedWeek] = useState(new Date());
   const [punchData, setPunchData] = useState({
     punchInTime: null,
     punchOutTime: null,
-    totalWorkingHours: null
+    totalWorkingHours: null,
+    lastPunch: null
   });
+
+  const getWeekRange = (date) => {
+    const start = new Date(date);
+    start.setDate(start.getDate() - start.getDay()); 
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+
+    return `${start.toLocaleDateString('en-US', { 
+      day: '2-digit',
+      month: 'short'
+    })} - ${end.toLocaleDateString('en-US', { 
+      day: '2-digit',
+      month: 'short'
+    })}`;
+  };
+
+  const navigateWeek = (direction) => {
+    setSelectedWeek(prevWeek => {
+      const newDate = new Date(prevWeek);
+      newDate.setDate(prevWeek.getDate() + (direction === 'next' ? 7 : -7));
+      return newDate;
+    });
+  };
 
   const fetchPunchData = async () => {
     try {
       const response = await fetch(`${ENDPOINTS.PUNCH_CALCULATE}/1`);
       const data = await response.json();
       setPunchData(data);
+      setIsPunchedIn(data.lastPunch === 'IN');
     } catch (error) {
       console.error(MESSAGES.PUNCH_DATA_FETCH_ERROR, error);
     }
   };
+
+  useEffect(() => {
+    fetchPunchData();
+  }, []);
 
   const handlePunchClick = async () => {
     const punchRequest = {
@@ -173,9 +202,15 @@ const Dashboard = () => {
                 <div className="weekly-stats-header">
                   <h5>Weekly Stats</h5>
                   <div className="week-navigator">
-                    <FaChevronLeft className="week-nav-icon" />
-                    <span className="week-range">{currentWeek}</span>
-                    <FaChevronRight className="week-nav-icon" />
+                    <FaChevronLeft 
+                      className="week-nav-icon" 
+                      onClick={() => navigateWeek('prev')}
+                    />
+                    <span className="week-range">{getWeekRange(selectedWeek)}</span>
+                    <FaChevronRight 
+                      className="week-nav-icon" 
+                      onClick={() => navigateWeek('next')}
+                    />
                   </div>
                 </div>
                 <div className="weekly-time-details">
