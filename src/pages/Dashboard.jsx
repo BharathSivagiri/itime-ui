@@ -15,7 +15,9 @@ const Dashboard = () => {
     punchInTime: null,
     punchOutTime: null,
     totalWorkingHours: null,
-    lastPunch: null
+    lastPunch: null,
+    shiftStartTime: null,
+    shiftEndTime: null
   });
 
   const getWeekRange = (date) => {
@@ -174,7 +176,7 @@ const Dashboard = () => {
                 <div className="punch-controls">
                   <div className="shift-hours">
                     <h5>Shift Hours</h5>
-                    <span>9:00 - 6:00</span>
+                    {punchData.shiftStartTime?.substring(0, 5)} - {punchData.shiftEndTime?.substring(0, 5)}
                   </div>
                   <button 
                     className={`punch-button ${isPunchedIn ? 'punched-in' : ''}`}
