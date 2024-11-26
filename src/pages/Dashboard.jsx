@@ -6,6 +6,7 @@ import { SlOptions } from "react-icons/sl";
 import './css/Dashboard.css';
 import { ENDPOINTS } from '../constants/apiEndpoints';
 import { MESSAGES } from '../constants/AppMessages';
+import moment from 'moment';
 
 const Dashboard = () => {
   const [isPunchedIn, setIsPunchedIn] = useState(false);
@@ -44,11 +45,14 @@ const Dashboard = () => {
   };
 
   const fetchPunchData = async () => {
+    const dataDate = moment().format("YYYY-MM-DD");
+    console.log("Fetching punch data for date:", dataDate);
     try {
-      const response = await fetch(`${ENDPOINTS.PUNCH_CALCULATE}/1`);
+      const response = await fetch(`${ENDPOINTS.PUNCH_CALCULATE}/1?date=${dataDate}`);
       const data = await response.json();
       setPunchData(data);
       setIsPunchedIn(data.lastPunch === 'IN');
+
     } catch (error) {
       console.error(MESSAGES.PUNCH_DATA_FETCH_ERROR, error);
     }
