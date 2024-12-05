@@ -12,6 +12,10 @@ const Dashboard = () => {
   const [isPunchedIn, setIsPunchedIn] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(new Date());
+  const [weeklyStats, setWeeklyStats] = useState({
+    totalShiftHours: '--:--',
+    totalActualHours: '--:--'
+  });
   const [punchData, setPunchData] = useState({
     punchInTime: null,
     punchOutTime: null,
@@ -36,16 +40,37 @@ const Dashboard = () => {
     })}`;
   };
 
-  const navigateWeek = (direction) => {
-    setSelectedWeek(prevWeek => {
-      const newDate = new Date(prevWeek);
-      newDate.setDate(prevWeek.getDate() + (direction === 'next' ? 7 : -7));
-      return newDate;
-    });
+  const navigateWeek = async (direction) => {
+    const newSelectedWeek = moment(selectedWeek);
+    const updatedSelectedWeek = direction === 'next' ? newSelectedWeek.add(1, 'weeks') : newSelectedWeek.subtract(1, 'weeks');
+    setSelectedWeek(updatedSelectedWeek.toDate());
+
+    const weekStart = updatedSelectedWeek.clone().startOf('week').format('YYYY-MM-DD');
+    const weekEnd = updatedSelectedWeek.clone().endOf('week').format('YYYY-MM-DD');
+
+    await fetchWeeklyStats(weekStart, weekEnd);
+  };
+
+  const fetchWeeklyStats = async (weekStart, weekEnd) => {
+    console.log("Fetching weekly stats for week:", weekStart, "to", weekEnd)
+    try {
+      const response = await fetch(
+          `${ENDPOINTS.PUNCH}/weekly-stats?employeeId=1&startDate=${weekStart}&endDate=${weekEnd}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setWeeklyStats({
+          totalShiftHours: data.totalShiftHours || '--:--',
+          totalActualHours: data.totalActualHours || '--:--'
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching weekly stats:', error);
+    }
   };
 
   const fetchPunchData = async () => {
-    const dataDate = moment().format("YYYY-MM-DD");
+    const dataDate = moment().format("YYYY-MM-DD HH:mm:ss");
     console.log("Fetching punch data for date:", dataDate);
     try {
       const response = await fetch(`${ENDPOINTS.PUNCH_CALCULATE}/1?date=${dataDate}`);
@@ -59,7 +84,11 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    const currentWeek = moment(selectedWeek);
+    const weekStart = currentWeek.clone().startOf('week').format('YYYY-MM-DD');
+    const weekEnd = currentWeek.clone().endOf('week').format('YYYY-MM-DD');
     fetchPunchData();
+    fetchWeeklyStats(weekStart, weekEnd);
   }, []);
 
   const handlePunchClick = async () => {
@@ -91,7 +120,23 @@ const Dashboard = () => {
   };
 
   const getCurrentDate = () => {
-    return new Date().toLocaleDateString('en-US', { 
+    const now = new Date();
+    const shiftEndTime = punchData.shiftEndTime;
+    
+    // If it's a night shift that ends the next day
+    if (shiftEndTime) {
+      const [hours, minutes] = shiftEndTime.split(':');
+      const shiftEnd = new Date();
+      shiftEnd.setHours(parseInt(hours), parseInt(minutes), 0);
+      
+      // If current time is before shift end but after midnight
+      // Keep showing previous day's date
+      if (now.getHours() < parseInt(hours) && punchData.lastPunch === 'IN') {
+        now.setDate(now.getDate() - 1);
+      }
+    }
+    
+    return now.toLocaleDateString('en-US', { 
       weekday: 'long', 
       year: 'numeric', 
       month: 'long', 
@@ -222,11 +267,11 @@ const Dashboard = () => {
                 <div className="weekly-time-details">
                   <div className="weekly-time-item">
                     <span className="time-label">Scheduled Hours</span>
-                    <span className="time-value">--:--</span>
+                    <span className="time-value">{weeklyStats.totalShiftHours}</span>
                   </div>
                   <div className="weekly-time-item">
                     <span className="time-label">Worked Hours</span>
-                    <span className="time-value">--:--:--</span>
+                    <span className="time-value">{weeklyStats.totalActualHours}</span>
                   </div>
                 </div>
               </div>
