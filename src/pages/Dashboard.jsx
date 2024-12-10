@@ -52,10 +52,15 @@ const Dashboard = () => {
   };
 
   const fetchWeeklyStats = async (weekStart, weekEnd) => {
-    console.log("Fetching weekly stats for week:", weekStart, "to", weekEnd)
     try {
       const response = await fetch(
-          `${ENDPOINTS.PUNCH}/weekly-stats?employeeId=1&startDate=${weekStart}&endDate=${weekEnd}`
+          `${ENDPOINTS.PUNCH}/weekly-stats?startDate=${weekStart}&endDate=${weekEnd}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            }
+          }
       );
       if (response.ok) {
         const data = await response.json();
@@ -71,13 +76,16 @@ const Dashboard = () => {
 
   const fetchPunchData = async () => {
     const dataDate = moment().format("YYYY-MM-DD HH:mm:ss");
-    console.log("Fetching punch data for date:", dataDate);
     try {
-      const response = await fetch(`${ENDPOINTS.PUNCH_CALCULATE}/1?date=${dataDate}`);
+      const response = await fetch(`${ENDPOINTS.PUNCH_CALCULATE}?date=${dataDate}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
       const data = await response.json();
       setPunchData(data);
       setIsPunchedIn(data.lastPunch === 'IN');
-
     } catch (error) {
       console.error(MESSAGES.PUNCH_DATA_FETCH_ERROR, error);
     }
@@ -93,7 +101,6 @@ const Dashboard = () => {
 
   const handlePunchClick = async () => {
     const punchRequest = {
-      employeeId: 1,
       punchType: isPunchedIn ? 'OUT' : 'IN'
     };
 
@@ -101,6 +108,7 @@ const Dashboard = () => {
       const response = await fetch(ENDPOINTS.PUNCH, {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(punchRequest)
