@@ -2,6 +2,8 @@ import React from 'react';
 import './css/Navbar.css';
 import Logo from '../../images/logo192.png';
 import { MdOutlineWidgets } from "react-icons/md";
+import {useAuth} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const Navbar = ({ 
   toggleWidgetConfig, 
@@ -10,6 +12,14 @@ const Navbar = ({
   toggleWidget, 
   resetWidgets 
 }) => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
   return (
     <nav className="navbar">
       <div className="navbar-brand">
@@ -18,7 +28,7 @@ const Navbar = ({
       <div className="navbar-right">
         <div className="user-profile">
           <span>Welcome</span>
-          <button className="logout-btn">Logout</button>
+          <button className="logout-btn" onClick={handleLogout}>Logout</button>
         </div>
         <div className="widget-config">
           <button className="widget-config-btn" onClick={toggleWidgetConfig}>

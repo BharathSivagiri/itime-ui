@@ -1,0 +1,140 @@
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-container {
+    display: flex;
+    width: 1000px;
+    height: 600px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.left-section {
+    flex: 1;
+    background: linear-gradient(135deg, #0061f2 0%, #00a6fb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: white;
+}
+
+.brand-content {
+    text-align: center;
+}
+
+.company-logo {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.brand-content h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.tagline {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.right-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.login-form-container {
+    width: 100%;
+    max-width: 400px;
+    padding-right: 60px;
+}
+
+.login-form-container h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.login-subtitle {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #0061f2;
+    outline: none;
+}
+
+.login-button {
+    padding: 14px;
+    background: #0061f2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 108%;
+    margin: 20px auto;
+}
+
+.login-button:hover {
+    background: #0052cc;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-bottom: 15px;
+    text-align: center;
+    padding: 10px;
+    background: #ffe6e6;
+    border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .left-section {
+        padding: 30px;
+    }
+
+    .right-section {
+        padding: 30px;
+    }
+}
